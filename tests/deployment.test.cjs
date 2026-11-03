@@ -269,7 +269,7 @@ test('PH integration override uses device auth, a Java health check and separate
     'http://localhost:8089/auth/callback');
 }));
 
-test('CI builds the actual Java and React product and gates publishing on push and VERSION', () => {
+test('CI builds the actual product and gates amd64 publishing on explicit refs and VERSION', () => {
   const workflow = readFileSync(path.join(root, '.github/workflows/container.yaml'), 'utf8');
   assert.match(workflow, /java-version: "21"/);
   assert.match(workflow, /node-version: "22"/);
@@ -277,7 +277,43 @@ test('CI builds the actual Java and React product and gates publishing on push a
   assert.match(workflow, /node --test tests\/deployment\.test\.cjs/);
   assert.match(workflow, /needs: validate/);
   assert.match(workflow, /version="\$\(cat VERSION\)"/);
-  assert.match(workflow, /"\$\{GITHUB_REF_NAME\}" == "v\$\{version\}"/);
-  assert.match(workflow, /push: \$\{\{ github\.event_name == 'push' \}\}/);
+  assert.match(workflow, /"\$RELEASE_TAG" == "v\$\{version\}"/);
+  assert.match(workflow, /push: \$\{\{ github\.event_name == 'push' \|\| \(github\.event_name == 'workflow_dispatch' && inputs\.release_tag != ''\) \}\}/);
+  assert.match(workflow, /platforms: linux\/amd64\n/);
+  assert.match(workflow, /org\.opencontainers\.image\.revision=\$\{\{ steps\.image\.outputs\.revision \}\}/);
+  assert.doesNotMatch(workflow, /linux\/arm64|setup-qemu/);
   assert.doesNotMatch(workflow, /setup-python|requirements\.txt|planner_version|web\/|unittest/);
 });
+
+test('image selection preserves historical tags and identifies the actual source checkout', () => isolated(directory => {
+  const workflow = readFileSync(path.join(root, '.github/workflows/container.yaml'), 'utf8');
+  const source = workflow.match(/      - name: Select image tags[\s\S]*?        run: \|\n((?:          .*\n)+)/);
+  assert.ok(source, 'Missing executable image-selection step');
+  const script = source[1].split('\n').map(line => line.slice(10)).join('\n');
+  const version = readFileSync(path.join(root, 'VERSION'), 'utf8').trim();
+  const revision = run('git', ['rev-parse', 'HEAD']).trim();
+  const image = 'ghcr.io/sepa79/pocketplanner';
+  const output = path.join(directory, 'outputs');
+  for (const [kind, ref, requested, expectedRelease] of [
+    ['branch', 'main', '', []],
+    ['tag', 'v' + version, '', ['v' + version, 'v' + version + '-amd64']],
+    ['branch', 'main', 'v' + version, ['v' + version + '-amd64']],
+  ]) {
+    writeFileSync(output, '');
+    run('bash', ['-euo', 'pipefail', '-c', script], {
+      IMAGE: image, GITHUB_REF_TYPE: kind, GITHUB_REF_NAME: ref,
+      RELEASE_TAG: requested, GITHUB_OUTPUT: output,
+    });
+    const lines = readFileSync(output, 'utf8').split('\n');
+    assert.deepEqual(lines.filter(line => line.startsWith(image + ':')),
+      ['latest', 'sha-' + revision + '-amd64', ...expectedRelease].map(tag => image + ':' + tag));
+    assert.ok(lines.includes('revision=' + revision));
+    assert.ok(lines.includes('version=' + version));
+  }
+  for (const invalid of ['main', 'v999.999.999']) {
+    run('bash', ['-euo', 'pipefail', '-c', script], {
+      IMAGE: image, GITHUB_REF_TYPE: 'branch', GITHUB_REF_NAME: 'main',
+      RELEASE_TAG: invalid, GITHUB_OUTPUT: output,
+    }, 1);
+  }
+}));

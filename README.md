@@ -26,7 +26,7 @@ tag run and source revision before deployment; a pushed tag alone is not proof
 of a published image. See [0.2.5 verification](docs/RELEASE_0.2.5.md).
 
 Current verification passes **219 frontend tests, 621 Java tests** (including
-five packaged-application integration cases) and **14 deployment configuration
+five packaged-application integration cases) and **15 deployment configuration
 checks**. The release qualification covers an isolated final-image volume,
 browser editing, conflicts, auth, recreation and changing ports. Real PH
 acceptance uses only owned synthetic plans and a WireMock-only swarm; it does
