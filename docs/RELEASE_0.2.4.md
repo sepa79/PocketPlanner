@@ -44,3 +44,7 @@ org.opencontainers.image.revision and version labels; dispatch/push is not
 publication success. Runtime /api/info must report 0.2.4. This report records
 the pre-publication local gate; registry results are checked after CI finishes.
 No server deployment, operational plan transfer or PH/PD release is included.
+
+The actual 0.2.4 validate job passed, but its publish job subsequently failed
+on ARM-emulated UI test timeouts. This tag is not a completed publication;
+[0.2.5](RELEASE_0.2.5.md) records that separate packaging correction.

@@ -1,4 +1,4 @@
-FROM node:22-alpine AS frontend
+FROM --platform=$BUILDPLATFORM node:22-alpine AS frontend
 WORKDIR /build/frontend
 COPY frontend/package.json frontend/package-lock.json ./
 COPY frontend/vendor ./vendor
@@ -6,7 +6,7 @@ RUN npm ci
 COPY frontend ./
 RUN npm test && npm run build
 
-FROM maven:3.9-eclipse-temurin-21 AS build
+FROM --platform=$BUILDPLATFORM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /build
 COPY backend/pom.xml backend/pom.xml
 COPY backend/vendor backend/vendor

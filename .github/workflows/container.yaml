@@ -71,6 +71,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v6
+        id: build
         with:
           context: .
           platforms: linux/amd64,linux/arm64
@@ -81,3 +82,11 @@ jobs:
             org.opencontainers.image.source=https://github.com/sepa79/PocketPlanner
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.version=${{ steps.image.outputs.version }}
+      - name: Verify published runtime on both platforms
+        if: github.event_name == 'push'
+        env:
+          IMAGE: ghcr.io/sepa79/pocketplanner@${{ steps.build.outputs.digest }}
+          VERSION: ${{ steps.image.outputs.version }}
+        run: |
+          bash scripts/smoke-image.sh "$IMAGE" "$VERSION" linux/amd64
+          bash scripts/smoke-image.sh "$IMAGE" "$VERSION" linux/arm64

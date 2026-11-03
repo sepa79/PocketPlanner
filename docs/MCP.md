@@ -11,7 +11,7 @@ protocol negotiation and stateless servlet framing, not project code.
 The seven tools use the same Java commands/store as REST, fresh request-scoped PH
 access and explicit Host/Origin and one-MiB bounds. Version 0.2.4 fixes the
 runner-sensitive concurrency test without changing the MCP/auth contract;
-[release verification](RELEASE_0.2.4.md) separates local checks from publication.
+[release verification](RELEASE_0.2.5.md) separates local checks from publication.
 No older published tag should be assumed to contain it. Test mutations only with isolated synthetic databases,
 never a working plan. Deployment acceptance is tracked separately from SDK tests.
 

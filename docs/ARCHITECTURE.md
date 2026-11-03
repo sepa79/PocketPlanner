@@ -24,9 +24,10 @@ evidence. Registry publication, remote deployment and operational-data transfer
 are separate actions. Build locally or choose an explicitly verified published
 Java image; do not treat an older published tag as this implementation.
 
-The [0.2.4 patch](RELEASE_0.2.4.md) corrects a test-only executor starvation
-failure that blocked CI publication. Runtime owners, access checks and state
-contracts stay unchanged; CI now also fixes the visible processor count at four.
+The [0.2.5 release](RELEASE_0.2.5.md) includes the test-only executor starvation
+fix from 0.2.4 and native build stages for platform-independent artifacts.
+Runtime owners, access checks and state contracts stay unchanged; CI fixes the
+visible processor count at four and verifies both target runtime images.
 
 `backend/` is the sole backend implementation; `frontend/` is the product UI.
 Test mutations use synthetic temporary databases, never the working Planner

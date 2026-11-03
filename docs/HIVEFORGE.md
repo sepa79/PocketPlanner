@@ -17,8 +17,8 @@ with Plan/Stream/Activity, multiple Activity associations and Start/Stop from PP
 against an owned WireMock-only QA swarm. Desktop forwarded-preview login/restart
 remains unverified. No lab deployment was performed.
 
-The 0.2.3 CI runs failed before publication; the [0.2.4 patch](RELEASE_0.2.4.md)
-fixes their concurrency test. Do not infer image availability from a pushed tag:
+The 0.2.3 CI runs failed before publication; [0.2.5](RELEASE_0.2.5.md) fixes their
+concurrency test and ARM-emulated build-stage timeouts. Do not infer image availability from a pushed tag:
 check its successful publish job and registry digest/source revision. Local
 Compose may build an isolated image; HF needs an explicitly approved published
 Java image/ref available to its nodes. Publication does not authorize remote lab

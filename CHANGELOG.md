@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.2.5 - 2026-11-03
+
+### Fixed
+- Build and test architecture-independent React assets and Java bytecode on BUILDPLATFORM instead of running timing-sensitive UI tests under ARM emulation. Keep every test and its existing timeout; the final JRE images retain their requested target architectures.
+- Verify the published immutable image on amd64 and arm64 using fresh tmpfs-only workspaces: health, SQLite-backed state and the packaged application version. No operational data, volumes or services are used.
+
 ## 0.2.4 - 2026-11-03
 
 ### Fixed

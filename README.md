@@ -17,11 +17,12 @@ packages own UI shell/theme and browser device authentication; shared JVM client
 connect to PH Auth. One JAR serves the UI, API, SSE and MCP; one container runs one
 application replica. Node and Maven are build tools, not runtime services.
 
-Release **0.2.4** retains the Java/React implementation and fixes the MCP
-concurrency test that blocked publication of 0.2.3. The release workflow publishes
-`ghcr.io/sepa79/pocketplanner:v0.2.4` only after validation. Confirm its successful
+Release **0.2.5** retains the Java/React implementation, fixes the MCP
+concurrency test and builds platform-independent artifacts without ARM-emulated
+UI test timeouts. The release workflow publishes
+`ghcr.io/sepa79/pocketplanner:v0.2.5` only after validation. Confirm its successful
 tag run and source revision before deployment; a pushed tag alone is not proof
-of a published image. See [0.2.4 verification](docs/RELEASE_0.2.4.md).
+of a published image. See [0.2.5 verification](docs/RELEASE_0.2.5.md).
 
 Current verification passes **219 frontend tests, 621 Java tests** (including
 five packaged-application integration cases) and **14 deployment configuration
