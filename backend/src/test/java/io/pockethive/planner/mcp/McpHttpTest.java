@@ -30,6 +30,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterAll;
@@ -140,15 +141,16 @@ class McpHttpTest {
 
     @Test
     void concurrentClientsCannotBorrowIdentityAndPublicReadsNeedNoVerifiedIdentity() {
-        try (var admin = connection(ADMIN); var viewer = connection(VIEWER); var anonymous = connection(null)) {
+        try (var executor = Executors.newVirtualThreadPerTaskExecutor();
+             var admin = connection(ADMIN); var viewer = connection(VIEWER); var anonymous = connection(null)) {
             admin.client.initialize();
             viewer.client.initialize();
             anonymous.client.initialize();
             List<CompletableFuture<Void>> pending = new ArrayList<>();
             for (int index = 0; index < 6; index++) {
-                pending.add(CompletableFuture.runAsync(() -> assertTrue(ok(call(admin, "get_access", Map.of())).get("canEdit").booleanValue())));
-                pending.add(CompletableFuture.runAsync(() -> assertFalse(ok(call(viewer, "get_access", Map.of())).get("canEdit").booleanValue())));
-                pending.add(CompletableFuture.runAsync(() -> assertTrue(ok(call(anonymous, "get_access", Map.of())).get("user").isNull())));
+                pending.add(CompletableFuture.runAsync(() -> assertTrue(ok(call(admin, "get_access", Map.of())).get("canEdit").booleanValue()), executor));
+                pending.add(CompletableFuture.runAsync(() -> assertFalse(ok(call(viewer, "get_access", Map.of())).get("canEdit").booleanValue()), executor));
+                pending.add(CompletableFuture.runAsync(() -> assertTrue(ok(call(anonymous, "get_access", Map.of())).get("user").isNull()), executor));
             }
             CompletableFuture.allOf(pending.toArray(CompletableFuture[]::new)).join();
             assertEquals(6, IDENTITY.headers().stream().filter(ADMIN::equals).count());

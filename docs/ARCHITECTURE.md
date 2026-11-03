@@ -18,11 +18,15 @@ central sign-in, and actual Start/Stop from PP. Canonical planning state and
 revision stay unchanged. Only an owned synthetic swarm targets local WireMock;
 the payment system and Redis are not mutated. Desktop forwarded-preview
 login/restart remains unverified.
-Version 0.2.3 is qualified as a local Java/React release; see
+Version 0.2.3 was qualified as a local Java/React release; see
 [release verification](RELEASE_VERIFICATION.md) for exact image and acceptance
 evidence. Registry publication, remote deployment and operational-data transfer
 are separate actions. Build locally or choose an explicitly verified published
 Java image; do not treat an older published tag as this implementation.
+
+The [0.2.4 patch](RELEASE_0.2.4.md) corrects a test-only executor starvation
+failure that blocked CI publication. Runtime owners, access checks and state
+contracts stay unchanged; CI now also fixes the visible processor count at four.
 
 `backend/` is the sole backend implementation; `frontend/` is the product UI.
 Test mutations use synthetic temporary databases, never the working Planner

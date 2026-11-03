@@ -9,9 +9,10 @@ separate container, stdio bridge, database or socket mount is needed. The SDK ow
 protocol negotiation and stateless servlet framing, not project code.
 
 The seven tools use the same Java commands/store as REST, fresh request-scoped PH
-access and explicit Host/Origin and one-MiB bounds. Version 0.2.3 is qualified as
-a local Java/React release; registry publication is separate. No older published
-tag should be assumed to contain it. Test mutations only with isolated synthetic databases,
+access and explicit Host/Origin and one-MiB bounds. Version 0.2.4 fixes the
+runner-sensitive concurrency test without changing the MCP/auth contract;
+[release verification](RELEASE_0.2.4.md) separates local checks from publication.
+No older published tag should be assumed to contain it. Test mutations only with isolated synthetic databases,
 never a working plan. Deployment acceptance is tracked separately from SDK tests.
 
 MCP initialization reports the same application version as the website's top bar and public `/api/info` endpoint. A `-dev` suffix identifies unreleased work; it is not a new published release.
@@ -113,6 +114,12 @@ writes, conflicts, validation, issue/lifecycle semantics and Host/Origin/body-si
 limits. Temporary synthetic SQLite files and fixture identity owners keep these
 tests independent of operational data and credentials. There is no copied Python
 MCP server or required Python smoke client.
+
+Concurrent blocking SDK calls use a test-scoped virtual-thread executor, not
+the common ForkJoinPool. CI runs the full build with
+`JAVA_TOOL_OPTIONS=-XX:ActiveProcessorCount=4` to retain coverage on smaller
+runners. All identity-isolation, request-count and revocation assertions remain;
+this does not relax production authentication or timeouts.
 
 For a manual read-only check, connect a Streamable HTTP client to the intended
 `/mcp`, initialize, list tools and call `get_access`/`list_plans` without a token.

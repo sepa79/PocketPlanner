@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.2.4 - 2026-11-03
+
+### Fixed
+- Run blocking concurrent MCP test clients on a dedicated, scoped virtual-thread executor instead of starving the shared ForkJoinPool on smaller runners. Preserve all identity-isolation, fresh authorization and revocation assertions without relaxing timeouts.
+- Run the CI Java build/tests with four visible processors so the original runner-sensitive failure remains covered. Publish this patch under a new version without moving v0.2.3.
+
 ### Documentation
 - Include the GPL-3.0 license text and declare GPL-3.0-or-later, matching PocketHive.
 

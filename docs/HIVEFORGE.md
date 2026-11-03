@@ -17,11 +17,12 @@ with Plan/Stream/Activity, multiple Activity associations and Start/Stop from PP
 against an owned WireMock-only QA swarm. Desktop forwarded-preview login/restart
 remains unverified. No lab deployment was performed.
 
-No Java/React image or Git ref has been published by this local work. Do not use
-an older GHCR release and claim it contains the new stack. Local Compose may build
-an isolated test image; an HF deployment needs an explicitly approved published
-Java image/ref available to its nodes. This documentation update does not
-authorize publication, remote lab actions, or operational data export/copy/import.
+The 0.2.3 CI runs failed before publication; the [0.2.4 patch](RELEASE_0.2.4.md)
+fixes their concurrency test. Do not infer image availability from a pushed tag:
+check its successful publish job and registry digest/source revision. Local
+Compose may build an isolated image; HF needs an explicitly approved published
+Java image/ref available to its nodes. Publication does not authorize remote lab
+actions or operational data export/copy/import.
 
 ## Agent deployment playbook
 

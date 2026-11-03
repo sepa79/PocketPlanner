@@ -35,7 +35,9 @@ jobs:
           sudo apt-get install -y --no-install-recommends ansible-core
       - name: Validate deployment configuration
         run: node --test tests/deployment.test.cjs
-      - name: Test and build React and Java
+      - name: Test and build React and Java (4 CPU regression)
+        env:
+          JAVA_TOOL_OPTIONS: -XX:ActiveProcessorCount=4
         run: bash scripts/build-java.sh
   publish:
     needs: validate
