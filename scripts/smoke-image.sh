@@ -4,7 +4,7 @@ image="${1:?Expected immutable image reference}"
 version="${2:?Expected application version}"
 platform="${3:?Expected runtime platform}"
 [[ "$image" == *@sha256:* || "$image" == sha256:* ]]
-[[ "$platform" == linux/amd64 || "$platform" == linux/arm64 ]]
+[[ "$platform" == linux/amd64 ]]
 directory="$(mktemp -d /tmp/planner-image-smoke-XXXXXXXX)"
 container=""
 cleanup() {

@@ -27,7 +27,8 @@ Java image; do not treat an older published tag as this implementation.
 The [0.2.5 release](RELEASE_0.2.5.md) includes the test-only executor starvation
 fix from 0.2.4 and native build stages for platform-independent artifacts.
 Runtime owners, access checks and state contracts stay unchanged; CI fixes the
-visible processor count at four and verifies both target runtime images.
+visible processor count at four and verifies the amd64 runtime image.
+The supported and published container target is linux/amd64 (x86-64) only.
 
 `backend/` is the sole backend implementation; `frontend/` is the product UI.
 Test mutations use synthetic temporary databases, never the working Planner

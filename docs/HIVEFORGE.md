@@ -1,5 +1,8 @@
 # HiveForge deployment
 
+Supported image architecture: **linux/amd64 (x86-64) only**. Select an amd64
+target node; ARM and 32-bit x86 are not supported or published.
+
 This repository uses HiveForge manifest version 0.5. Project: `pocketplanner`; component: `planner`; profile: `swarm`; actions: `deploy` and `update`. Project Ansible renders `/hf/stacks/compose.yml`; HiveForge owns Docker deployment execution. No Docker socket or direct host deployment is required by the project playbook.
 
 Prepare through HiveForge MCP: inspect the repository/ref, register the approved project/ref, set environment policy, set runtime values, validate requirements, then execute the approved lifecycle action. This repository does not guess an environment or automatically deploy to one.

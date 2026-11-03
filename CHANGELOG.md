@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Changed
+- Support and publish linux/amd64 (x86-64) only. Remove ARM/QEMU publication and retain immutable-image JRE/SQLite smoke checks for amd64.
+- Allow an explicit manual release-tag input to build an existing immutable source tag as a distinct -amd64 image with the current workflow; derive revision labels and architecture-specific source image tags from the actual checkout, not the workflow commit. Empty manual input remains build-only; previously published multi-platform release/source tags are not overwritten.
+
 ## 0.2.5 - 2026-11-03
 
 ### Fixed
